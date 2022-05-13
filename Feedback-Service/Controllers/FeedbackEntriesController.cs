@@ -1,3 +1,5 @@
+using Feedback_Service.Data;
+using Feedback_Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Feedback_Service.Controllers
@@ -6,20 +8,23 @@ namespace Feedback_Service.Controllers
     [Route("[controller]")]
     public class FeedbackEntriesController : ControllerBase
     {
-        private readonly ILogger<FeedbackEntriesController> _logger;
+        public AccessDatabaseHandler databaseHandler;
 
-        public FeedbackEntriesController(ILogger<FeedbackEntriesController> logger)
+        public FeedbackEntriesController()
         {
-            _logger = logger;
+            this.databaseHandler = new AccessDatabaseHandler();
         }
 
-        [HttpGet(Name = "GetFeedbackEntries")]
-        public IEnumerable<String> Get()
+        [HttpGet("{patientId}")]
+        public List<FeedbackEntry> GetAllForPatient(Guid patientId)
         {
-            List<String> result = new List<String>();
-            result.Add("Hello 1");
-            result.Add("Hello 2");
-            return result;
+            return databaseHandler.GetAllForPatient(patientId);
+        }
+
+        public void Create(Guid authorId, Guid stressMeasurementId, Guid patientId, string text)
+        {
+            FeedbackEntry feedbackEntry = new FeedbackEntry(authorId, stressMeasurementId, patientId, text);
+            databaseHandler.AddFeedbackEntry(feedbackEntry);
         }
     }
 }
