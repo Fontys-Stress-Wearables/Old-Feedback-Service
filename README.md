@@ -3,6 +3,10 @@
 The service that is responsible for handling feedback on stress measurements.
 ## API endpoints
 ```
+[HttpGet] GetByPatientId
+/FeedbackEntries/{patientId}
+
+[HttpPost] Create
 /FeedbackEntries
 ```
 ## Docker
